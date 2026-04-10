@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Smart Hospital</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        {% block main_content %}{% endblock %}
+    </div>
+
+    <!-- Rule-based Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbot-widget">
+        <div class="chatbot-header" onclick="toggleChat()">
+            <i class="fas fa-robot"></i> Hospital Assistant
+        </div>
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="chat-message bot-message">Hello! How can I help you today?</div>
+        </div>
+        <div class="chatbot-footer">
+            <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatInput(event)">
+            <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        function toggleChat() {
+            const body = document.getElementById('chatbot-body');
+            const footer = document.querySelector('.chatbot-footer');
+            if (body.style.display === 'none' || body.style.display === '') {
+                body.style.display = 'flex';
+                footer.style.display = 'flex';
+            } else {
+                body.style.display = 'none';
+                footer.style.display = 'none';
+            }
+        }
+
+        function handleChatInput(e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim().toLowerCase();
+            if(!message) return;
+            
+            const chatBody = document.getElementById('chatbot-body');
+            chatBody.innerHTML += `<div class="chat-message user-message">${input.value}</div>`;
+            input.value = '';
+            
+            // Simple rule-based bot
+            let reply = "I'm sorry, I didn't understand that. You can ask about 'appointments', 'timings', or 'doctors'.";
+            if(message.includes('appointment')) {
+                reply = "You can book an appointment by registering as a patient and navigating to the Appointments section.";
+            } else if(message.includes('timing')) {
+                reply = "Our hospital is open 24/7. OPD timings are 9:00 AM to 5:00 PM.";
+            } else if(message.includes('doctor')) {
+                reply = "We have specialists in Cardiology, Neurology, Orthopedics, and more.";
+            }
+            
+            setTimeout(() => {
+                chatBody.innerHTML += `<div class="chat-message bot-message">${reply}</div>`;
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 500);
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

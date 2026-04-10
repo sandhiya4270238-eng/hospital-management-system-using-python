@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-user-md"></i> Doctors</a></li>
+            <li><a href="#"><i class="fas fa-procedures"></i> Patients</a></li>
+            <li><a href="#"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="{{ url_for('manage_beds') }}" class="active"><i class="fas fa-bed"></i> Bed Management</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">Real-Time Bed Management</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="table-card" style="padding: 2rem;">
+                <h3 style="margin-bottom: 2rem;">Current Bed Status</h3>
+                
+                <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+                    <div><span style="display:inline-block; width:15px; height:15px; background:var(--success); border-radius:3px;"></span> Available</div>
+                    <div><span style="display:inline-block; width:15px; height:15px; background:var(--danger); border-radius:3px;"></span> Occupied</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1.5rem;">
+                    {% for bed in beds %}
+                    <div style="padding: 1.5rem; border-radius: 12px; text-align: center; color: white; background: {% if bed.status == 'Available' %}var(--success){% else %}var(--danger){% endif %}; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fas fa-bed" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+                        <h4 style="margin: 0;">{{ bed.bed_number }}</h4>
+                        <p style="font-size: 0.8rem; margin: 0; opacity: 0.9;">{{ bed.type }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

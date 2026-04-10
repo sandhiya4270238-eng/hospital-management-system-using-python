@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('patient_dashboard') }}"><i class="fas fa-user"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('book_appointment') }}" class="active"><i class="fas fa-calendar-plus"></i> Book Appointment</a></li>
+            <li><a href="#"><i class="fas fa-file-medical"></i> My Records</a></li>
+            <li><a href="{{ url_for('ai_predictor') }}"><i class="fas fa-brain"></i> AI Predictor</a></li>
+            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Bills</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">Book an Appointment</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar" style="background:#e6f4ea; color:#34a853;">P</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="auth-card" style="margin: 0 auto; max-width: 600px;">
+                <h2 style="text-align: center; margin-bottom: 2rem;">Schedule Appointment</h2>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="{{ url_for('book_appointment') }}">
+                    <div class="form-group">
+                        <label for="doctor_id">Select Doctor (Specialization)</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user-md"></i>
+                            <select name="doctor_id" id="doctor_id" required>
+                                <option value="" disabled selected>Select a doctor...</option>
+                                {% for doc in doctors %}
+                                <option value="{{ doc.id }}">Dr. {{ doc.user.name }} - {{ doc.specialization }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Appointment Date</label>
+                        <div class="input-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="date" name="date" required min="{{ today }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time Slot</label>
+                        <div class="input-icon">
+                            <i class="fas fa-clock"></i>
+                            <select name="time" id="time" required>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:30">11:30 AM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full btn-large">Confirm Appointment</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

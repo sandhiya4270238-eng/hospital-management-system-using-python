@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="auth-container">
+    <div class="auth-image">
+        <h2 class="auth-headline">Join AI SmartHospital</h2>
+        <p>Experience the future of healthcare. Patients can book appointments, while Doctors can leverage AI tools.</p>
+    </div>
+    <div class="auth-form-container">
+        <div class="auth-card">
+            <h2>Create an account</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" name="name" required placeholder="John Doe">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required placeholder="john@example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="role">Register As</label>
+                    <div class="input-icon">
+                        <i class="fas fa-id-badge"></i>
+                        <select name="role" id="role" required>
+                            <option value="Patient">Patient</option>
+                            <option value="Doctor">Doctor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required placeholder="Create a strong password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Register</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

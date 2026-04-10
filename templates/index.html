@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="landing-page">
+    <nav class="landing-navbar">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i> AI SmartHospital
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('login') }}" class="btn-primary">Login</a>
+            <a href="{{ url_for('register') }}" class="btn-secondary">Register</a>
+        </div>
+    </nav>
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Next-Generation Digital Healthcare</h1>
+            <p>Experience seamless hospital management with AI-powered disease prediction, real-time bed tracking, and smart appointments.</p>
+            <div class="hero-buttons">
+                <a href="{{ url_for('register') }}" class="btn-primary btn-large">Join as Patient</a>
+                <a href="{{ url_for('login') }}" class="btn-secondary btn-large">Doctor Portal</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card ai-pred">
+                <i class="fas fa-brain"></i> AI Disease Prediction
+            </div>
+            <div class="floating-card real-time">
+                <i class="fas fa-bed"></i> Real-time Tracking
+            </div>
+            <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80" alt="Hospital Building">
+        </div>
+    </div>
+</div>
+{% endblock %}

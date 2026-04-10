@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('patient_dashboard') }}"><i class="fas fa-user"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('book_appointment') }}"><i class="fas fa-calendar-plus"></i> Book Appointment</a></li>
+            <li><a href="#"><i class="fas fa-file-medical"></i> My Records</a></li>
+            <li><a href="{{ url_for('ai_predictor') }}"><i class="fas fa-brain"></i> AI Predictor</a></li>
+            <li><a href="{{ url_for('patient_bills') }}" class="active"><i class="fas fa-file-invoice-dollar"></i> Bills</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">My Invoices</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar" style="background:#e6f4ea; color:#34a853;">P</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h3>Recent Bills</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date Issued</th>
+                                <th>Details</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bill in bills %}
+                            <tr>
+                                <td>{{ bill.date_issued.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ bill.details }}</td>
+                                <td>${{ "%.2f"|format(bill.amount) }}</td>
+                                <td>
+                                    {% if bill.status == 'Unpaid' %}
+                                        <span class="status-badge status-pending">Unpaid</span>
+                                    {% else %}
+                                        <span class="status-badge status-completed">Paid</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem;" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No invoices found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

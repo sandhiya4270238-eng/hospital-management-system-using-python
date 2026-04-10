@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="auth-container">
+    <div class="auth-image">
+        <h2 class="auth-headline">Welcome Back to AI SmartHospital</h2>
+        <p>Access your dashboard to manage appointments, track patients, and utilize AI insights.</p>
+    </div>
+    <div class="auth-form-container">
+        <div class="auth-card">
+            <h2>Login to your account</h2>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required placeholder="Enter password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Login</button>
+            </form>
+            <p class="auth-switch">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

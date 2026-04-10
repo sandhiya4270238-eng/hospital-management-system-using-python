@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('doctor_dashboard') }}" class="active"><i class="fas fa-stethoscope"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-calendar-alt"></i> My Appointments</a></li>
+            <li><a href="#"><i class="fas fa-procedures"></i> My Patients</a></li>
+            <li><a href="#"><i class="fas fa-notes-medical"></i> Medical Notes</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">Doctor Portal</div>
+            <div class="user-profile">
+                <span>Dr. {{ current_user.name }}</span>
+                <div class="user-avatar" style="background:#e8f0fe; color:var(--primary-color);">D</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-user-injured"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.today_patients }}</h3>
+                        <p>Today's Patients</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon warning"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.pending_appointments }}</h3>
+                        <p>Pending Appointments</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h3>Today's Schedule</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Patient Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appt in appointments %}
+                            <tr>
+                                <td>{{ appt.time.strftime('%H:%M') }}</td>
+                                <td>{{ appt.patient.user.name }}</td>
+                                <td><span class="status-badge status-{{ appt.status | lower }}">{{ appt.status }}</span></td>
+                                <td>
+                                    {% if appt.status == 'Pending' %}
+                                    <form action="{{ url_for('update_appointment', id=appt.id, status='Confirmed') }}" method="POST" style="display:inline;">
+                                        <button class="btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Confirm</button>
+                                    </form>
+                                    {% elif appt.status == 'Confirmed' %}
+                                    <form action="{{ url_for('update_appointment', id=appt.id, status='Completed') }}" method="POST" style="display:inline;">
+                                        <button class="btn-primary" style="padding:0.3rem 0.6rem; font-size:0.8rem; background:var(--success);">Complete</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align: center;">No appointments scheduled for today.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

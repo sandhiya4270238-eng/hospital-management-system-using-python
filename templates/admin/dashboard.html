@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-user-md"></i> Doctors</a></li>
+            <li><a href="#"><i class="fas fa-procedures"></i> Patients</a></li>
+            <li><a href="#"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+            <li><a href="#"><i class="fas fa-bed"></i> Bed Management</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">Admin Dashboard</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-procedures"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.total_patients }}</h3>
+                        <p>Total Patients</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-user-md"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.total_doctors }}</h3>
+                        <p>Total Doctors</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.appointments_count }}</h3>
+                        <p>Appointments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-bed"></i></div>
+                    <div class="stat-info">
+                        <h3>{{ stats.available_beds }}</h3>
+                        <p>Available Beds</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Analytics -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Revenue Overview</h3>
+                    <canvas id="revenueChart" height="100"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Appointments Status</h3>
+                    <canvas id="statusChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Patients Table -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h3>Recent Patients</h3>
+                    <button class="btn-primary" disabled><i class="fas fa-plus"></i> Add Patient</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Add dynamic rows here when data is seeded -->
+                            <tr>
+                                <td colspan="4" style="text-align: center;">No patients data available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Revenue Chart (Dummy data)
+    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Revenue ($)',
+                data: [12000, 19000, 15000, 22000, 30000, 25000],
+                borderColor: '#1a73e8',
+                backgroundColor: 'rgba(26, 115, 232, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Status Chart (Dummy data)
+    const statCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Pending', 'Cancelled'],
+            datasets: [{
+                data: [55, 30, 15],
+                backgroundColor: ['#34a853', '#fbbc04', '#ea4335']
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
+{% endblock %}

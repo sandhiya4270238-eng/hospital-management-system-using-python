@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('patient_dashboard') }}"><i class="fas fa-user"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-calendar-plus"></i> Book Appointment</a></li>
+            <li><a href="#"><i class="fas fa-file-medical"></i> My Records</a></li>
+            <li><a href="{{ url_for('ai_predictor') }}" class="active"><i class="fas fa-brain"></i> AI Predictor</a></li>
+            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Bills</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">AI Disease Predictor</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar" style="background:#e6f4ea; color:#34a853;">P</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="charts-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
+                <div class="chart-card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <i class="fas fa-robot" style="font-size: 3rem; color: var(--primary-color);"></i>
+                        <h2 style="margin-top: 1rem;">Check Your Symptoms</h2>
+                        <p style="color: var(--text-secondary);">Select the symptoms you are experiencing and our AI will predict a possible condition and recommend a specialist.</p>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('ai_predictor') }}">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                            <!-- Checkboxes -->
+                            <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="checkbox" name="symptoms" value="fever" style="width: 20px; height: 20px;">
+                                <span>Fever</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="checkbox" name="symptoms" value="cough" style="width: 20px; height: 20px;">
+                                <span>Cough</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="checkbox" name="symptoms" value="fatigue" style="width: 20px; height: 20px;">
+                                <span>Fatigue</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+                                <input type="checkbox" name="symptoms" value="headache" style="width: 20px; height: 20px;">
+                                <span>Headache</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary btn-full btn-large"><i class="fas fa-magic"></i> Analyze Symptoms</button>
+                    </form>
+
+                    {% if result %}
+                    <div style="margin-top: 2rem; padding: 2rem; background: var(--accent-color); border-radius: 12px; text-align: center; animation: float 3s ease-in-out infinite;">
+                        <h3 style="color: var(--primary-color);">AI Analysis Complete</h3>
+                        <p style="font-size: 1.2rem; margin: 1rem 0;">Predicted Condition: <strong>{{ result.disease }}</strong></p>
+                        <p>Recommended Specialist: <strong>{{ result.specialization }}</strong></p>
+                        <a href="#" class="btn-primary" style="margin-top: 1rem;">Book {{ result.specialization }} Now</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<style>
+    input[type="checkbox"]:checked + span {
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-heartbeat"></i> AI Hospital
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('patient_dashboard') }}" class="active"><i class="fas fa-user"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-calendar-plus"></i> Book Appointment</a></li>
+            <li><a href="#"><i class="fas fa-file-medical"></i> My Records</a></li>
+            <li><a href="#"><i class="fas fa-brain"></i> AI Predictor</a></li>
+            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Bills</a></li>
+            <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title">Patient Portal</div>
+            <div class="user-profile">
+                <span>{{ current_user.name }}</span>
+                <div class="user-avatar" style="background:#e6f4ea; color:#34a853;">P</div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <!-- Actions Grid -->
+            <div class="stats-grid">
+                <div class="stat-card" style="cursor: pointer; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
+                    <div class="stat-icon" style="background: rgba(255,255,255,0.2); color:white;"><i class="fas fa-calendar-plus"></i></div>
+                    <div class="stat-info">
+                        <h3 style="color:white; font-size:1.5rem;">Book Now</h3>
+                        <p style="color: rgba(255,255,255,0.8);">Schedule Appointment</p>
+                    </div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;">
+                    <div class="stat-icon blue"><i class="fas fa-brain"></i></div>
+                    <div class="stat-info">
+                        <h3>AI Predictor</h3>
+                        <p>Check symptoms</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Appointments -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h3>Upcoming Appointments</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Doctor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" style="text-align: center;">No upcoming appointments.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
